@@ -142,7 +142,7 @@ public class networkinterface extends CordovaPlugin {
                          InetAddress inetAddress = enumIpAddr.nextElement();
                          if (intf.getName().equals("eth0") && inetAddress instanceof Inet4Address) {
                              String ipaddress = inetAddress.getHostAddress().toString();
-                             return new String[]{ ipaddress, subnet };
+                             return new String[]{ ipaddress, "eth0" };
                          }
                  }
             }
