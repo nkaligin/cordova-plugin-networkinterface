@@ -40,7 +40,7 @@ public class networkinterface extends CordovaPlugin {
 	public static final String GET_HTTP_PROXY_INFORMATION="getHttpProxyInformation";
 	private static final String TAG = "cordova-plugin-networkinterface";
 
-	
+
 
 	@Override
 	public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -71,7 +71,7 @@ public class networkinterface extends CordovaPlugin {
 	private boolean getHttpProxyInformation(String url, CallbackContext callbackContext) throws JSONException, URISyntaxException {
 		JSONArray proxiesInformation = new JSONArray();
 		ProxySelector defaultProxySelector = ProxySelector.getDefault();
-		
+
 		if(defaultProxySelector != null){
 			List<java.net.Proxy> proxyList = defaultProxySelector.select(new URI(url));
 			for(java.net.Proxy proxy: proxyList){
@@ -134,23 +134,23 @@ public class networkinterface extends CordovaPlugin {
 	}
 
 	private String[] getCarrierIPAddress() {
-	  try {
-	    for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-	       NetworkInterface intf = (NetworkInterface) en.nextElement();
-	       //Log.e(TAG, "Interface: " + intf.toString() + " name: " + intf.getName() + " display nane: " + intf.getDisplayName() );
-	       for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-	          InetAddress inetAddress = enumIpAddr.nextElement();
-			   if (!inetAddress.isLoopbackAddress() && (!intf.getName().equals("wlan0")) && inetAddress instanceof Inet4Address) {
-				   String ipaddress = inetAddress.getHostAddress().toString();
-				   String subnet = getIPv4Subnet(inetAddress);
-				   return new String[]{ ipaddress, subnet };
-	          }
-	       }
-	    }
-	  } catch (SocketException ex) {
-	     Log.e(TAG, "Exception in Get IP Address: " + ex.toString());
-	  }
-	  return new String[]{ null, null };
+
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+                 NetworkInterface intf = (NetworkInterface) en.nextElement();
+                 for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                         InetAddress inetAddress = enumIpAddr.nextElement();
+                         if (intf.getName().equals("eth0") && inetAddress instanceof Inet4Address) {
+                             String ipaddress = inetAddress.getHostAddress().toString();
+                             return new String[]{ ipaddress, subnet };
+                         }
+                 }
+            }
+        } catch (SocketException ex) {
+         Log.e(TAG, "Exception in Get IP Address: " + ex.toString());
+        }
+        return new String[]{ null, null };
+
 	}
 
 	public static String getIPv4Subnet(InetAddress inetAddress) {
